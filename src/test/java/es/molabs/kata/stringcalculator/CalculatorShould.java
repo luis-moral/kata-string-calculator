@@ -30,9 +30,15 @@ public class CalculatorShould
 		Assert.assertThat(calculator.add("1,2"), Is.is(3));
 	}
 	
+	@Test
+	public void sum_three_number_values()
+	{
+		Assert.assertThat(calculator.add("1,2,3"), Is.is(6));
+	}
+	
 	@Before
 	public void setUp()
 	{
-		calculator = new Calculator();
+		calculator = new Calculator(",");
 	}
 }

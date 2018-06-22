@@ -1,10 +1,18 @@
 package es.molabs.kata.stringcalculator;
 
-import java.util.Optional;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CalculatorInputParser 
 {
-	private final static String DELIMITER = ",";
+	private final String delimiter;
+	
+	public CalculatorInputParser(String delimiter)
+	{
+		this.delimiter = delimiter;
+	}
 	
 	public CalculatorInput parse(String numbers)
 	{
@@ -12,30 +20,20 @@ public class CalculatorInputParser
 		
 		if (numbers.isEmpty())
 		{
-			input = new CalculatorInput(Optional.empty(), Optional.empty());
+			input = new CalculatorInput();
 		}
 		else
 		{
-			String[] splittedNumbers = numbers.split(DELIMITER);
+			String[] splittedNumbers = numbers.split(delimiter);
 			
-			if (splittedNumbers.length == 1)
-			{
-				input = 
-					new CalculatorInput
-					(
-						Optional.of(Integer.valueOf(splittedNumbers[0])), 
-						Optional.empty()
-					);
-			}
-			else
-			{
-				input = 
-					new CalculatorInput
-					(
-						Optional.of(Integer.valueOf(splittedNumbers[0])), 
-						Optional.of(Integer.valueOf(splittedNumbers[1]))
-					);
-			}			
+			input = 
+				new CalculatorInput
+				(
+					Arrays
+						.stream(splittedNumbers)
+						.map(value -> Integer.parseInt(value))
+						.collect(Collectors.toList())
+				);		
 		}
 		
 		return input;
@@ -43,23 +41,21 @@ public class CalculatorInputParser
 
 	public class CalculatorInput
 	{
-		private final Optional<Integer> parameterOne;
-		private final Optional<Integer> parameterTwo;
+		private final List<Integer> parameterList;
 		
-		public CalculatorInput(Optional<Integer> parameterOne, Optional<Integer> parameterTwo) 
+		public CalculatorInput() 
 		{
-			this.parameterOne = parameterOne;
-			this.parameterTwo = parameterTwo;
+			this(new LinkedList<Integer>());
+		}
+		
+		public CalculatorInput(List<Integer> parameterList)
+		{
+			this.parameterList = parameterList;
 		}
 
-		public Optional<Integer> getParameterOne() 
+		public List<Integer> getParameterList() 
 		{
-			return parameterOne;
-		}
-
-		public Optional<Integer> getParameterTwo() 
-		{
-			return parameterTwo;
+			return parameterList;
 		}
 	}
 }
